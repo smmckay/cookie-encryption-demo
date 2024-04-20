@@ -39,9 +39,9 @@ export default {
         let backend_url = new URL(request.url);
         backend_url.hostname = env.BACKEND_HOST;
         let backend_req = new Request(backend_url, request);
-        
+
         if (request.headers.has('cookie')) {
-            let decrypted_cookies = libCookie.parse(request.headers['cookie']).entries().map(([name, value]) => {
+            let decrypted_cookies = libCookie.parse(request.headers.get('cookie')).entries().map(([name, value]) => {
                 return libCookie.serialize(name, decrypt_str(value));
             }).join('; ');
             backend_req.headers['cookie'] = decrypted_cookies;
@@ -54,10 +54,10 @@ export default {
             backend_rsp = new Response(backend_rsp.body, backend_rsp);
 
             let rsp_cookies = setCookie.parse(backend_rsp);
-            backend_rsp.headers['set-cookie'] = rsp_cookies.map(function(cookie) {
+            backend_rsp.headers.set('set-cookie', rsp_cookies.map(function(cookie) {
                 let encrypted = encrypt_str(cookie.value);
                 return libCookie.serialize(cookie.name, encrypted, cookie);
-            });
+            }));
         }
 
         return backend_rsp;

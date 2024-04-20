@@ -7,7 +7,7 @@ app.http('cookie', {
     handler: async (request, context) => {
         let value = null;
         if (request.headers.has('cookie')) {
-            let cookies = libCookie.parse(request.headers['cookie']);
+            let cookies = libCookie.parse(request.headers.get('cookie'));
             if ('counter' in cookies) {
                 value = parseInt(cookies['counter']);
             }
