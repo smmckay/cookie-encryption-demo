@@ -1,13 +1,31 @@
 const { app } = require('@azure/functions');
+const libCookie = require('cookie');
 
 app.http('cookie', {
     methods: ['GET', 'POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
-        context.log(`Http function processed request for url "${request.url}"`);
+        let value = null;
+        if (request.headers.has('cookie')) {
+            let cookies = libCookie.parse(request.headers['cookie']);
+            if ('counter' in cookies) {
+                value = parseInt(cookies['counter']);
+            }
+        }
 
-        const name = request.query.get('name') || await request.text() || 'world';
+        let newValue = value !== null ? value + 1 : 1;
 
-        return { body: `Hello, ${name}!` };
+        body = `Received from client: ${value}
+Value returned in cookie: ${newValue}`
+
+        return {
+            body: `Received from client: ${value}
+Value returned in cookie: ${newValue}`,
+            headers: {
+                'set-cookie': libCookie.serialize('counter', newValue.toString(), {
+                    secure: true
+                })
+            }
+        };
     }
 });
