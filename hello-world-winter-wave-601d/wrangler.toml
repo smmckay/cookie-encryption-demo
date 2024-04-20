@@ -3,3 +3,6 @@ main = "src/worker.js"
 compatibility_date = "2024-04-18"
 workers_dev = true
 compatibility_flags = [ "nodejs_compat" ]
+
+[vars]
+BACKEND_HOST = "happy-field-00e127d10.5.azurestaticapps.net"

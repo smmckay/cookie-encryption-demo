@@ -9,5 +9,9 @@
   },
   "devDependencies": {
     "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "cookie": "^0.6.0",
+    "set-cookie-parser": "^2.6.0"
   }
 }
